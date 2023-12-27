@@ -9,6 +9,7 @@ using Models;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Models.DTO;
 using Microsoft.Extensions.Options;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace DbContext;
 
@@ -171,7 +172,8 @@ public class csMainDbContext : Microsoft.EntityFrameworkCore.DbContext
             {
                 var connectionString = csAppConfig.DbSetActive.DbLogins.Find(
                     i => i.DbServer == "MariaDb" && i.DbUserLogin == "sysadmin").DbConnectionString;
-                optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString),
+                    mySqlOptions => mySqlOptions.SchemaBehavior(MySqlSchemaBehavior.Ignore));
             }
             base.OnConfiguring(optionsBuilder);
         }
